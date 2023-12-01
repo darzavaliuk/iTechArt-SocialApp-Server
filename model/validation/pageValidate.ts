@@ -1,4 +1,3 @@
-// @ts-nocheck
 import Joi, {Schema, ValidationResult} from "joi";
 import {IUser} from "../../types/User";
 

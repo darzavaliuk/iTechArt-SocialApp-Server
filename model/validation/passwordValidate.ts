@@ -1,5 +1,3 @@
-
-// @ts-nocheck
 import Joi, {Schema} from "joi";
 import {IUser} from "../../types/User";
 
