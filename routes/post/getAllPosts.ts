@@ -10,6 +10,9 @@ export const getAllPosts = catchAsyncError(async (req: Request, res: Response, n
 
         res.status(201).json({ success: true, posts });
     } catch (error) {
-        return
+        return res.status(500).json({
+            success: false,
+            message: (error as Error).message,
+        });
     }
 });
