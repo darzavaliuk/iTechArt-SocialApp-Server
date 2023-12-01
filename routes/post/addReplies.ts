@@ -69,7 +69,9 @@ export const addReplies = catchAsyncError(async (req: AuthenticatedRequest, res:
             post,
         });
     } catch (error) {
-        console.log(error);
-        return
+        return res.status(500).json({
+            success: false,
+            message: (error as Error).message,
+        });
     }
 });

@@ -20,6 +20,9 @@ export const deletePost = catchAsyncError(async (req: Request, res: Response, ne
             success: true,
         });
     } catch (error) {
-        return
+        return res.status(500).json({
+            success: false,
+            message: (error as Error).message,
+        });
     }
 });

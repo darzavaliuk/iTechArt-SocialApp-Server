@@ -7,11 +7,12 @@ export const updateLikes = catchAsyncError(async (req: any, res: any, next: any)
         const postId = req.body.postId;
 
         const post = await Post.findById(postId);
+        let isLikedBefore
 
-        // @ts-ignore
-        const isLikedBefore = post.likes.find(
-            (item) => item.userId === req.user.id
-        );
+        if (post)
+            isLikedBefore = post.likes.find(
+                (item) => item.userId === req.user.id
+            );
 
         if (isLikedBefore) {
             await Post.findByIdAndUpdate(postId, {
@@ -36,7 +37,7 @@ export const updateLikes = catchAsyncError(async (req: any, res: any, next: any)
             });
         } else {
             await Post.updateOne(
-                { _id: postId },
+                {_id: postId},
                 {
                     $push: {
                         likes: {
@@ -50,14 +51,11 @@ export const updateLikes = catchAsyncError(async (req: any, res: any, next: any)
                 }
             );
 
-            // @ts-ignore
-            if (req.user.id !== post.user._id) {
+            if (post && req.user.id !== post.user._id) {
                 await Notification.create({
                     creator: req.user,
                     type: "Like",
-                    // @ts-ignore
                     title: post.title ? post.title : "Liked your post",
-                    // @ts-ignore
                     userId: post.user._id,
                     postId: postId,
                 });
@@ -69,7 +67,9 @@ export const updateLikes = catchAsyncError(async (req: any, res: any, next: any)
             });
         }
     } catch (error) {
-        console.log(error);
-
+        return res.status(500).json({
+            success: false,
+            message: (error as Error).message,
+        });
     }
 });

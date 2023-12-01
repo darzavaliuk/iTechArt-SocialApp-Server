@@ -73,7 +73,9 @@ export const addReply = catchAsyncError(async (req: AuthenticatedRequest, res: R
             post,
         });
     } catch (error) {
-        console.log(error);
-        return
+        return res.status(500).json({
+            success: false,
+            message: (error as Error).message,
+        });
     }
 });

@@ -20,7 +20,10 @@ export const getRepliesUser = catchAsyncError(async (req: AuthenticatedRequest, 
 
         res.status(201).json({success: true, posts: myReplies});
     } catch (error) {
-        return;
+        return res.status(500).json({
+            success: false,
+            message: (error as Error).message,
+        });
     }
 })
 
@@ -37,6 +40,9 @@ export const getRepliesUserId = catchAsyncError(async (req: Request, res: Respon
 
         res.status(201).json({success: true, posts: myReplies});
     } catch (error) {
-        return;
+        return res.status(500).json({
+            success: false,
+            message: (error as Error).message,
+        });
     }
 })

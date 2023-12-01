@@ -15,7 +15,10 @@ export const getPostsUser = catchAsyncError(async (req: AuthenticatedRequest, re
         });
         res.status(201).json({success: true, posts});
     } catch (error) {
-        return
+        return res.status(500).json({
+            success: false,
+            message: (error as Error).message,
+        });
     }
 })
 
@@ -26,6 +29,9 @@ export const getPostsUserId = catchAsyncError(async (req: Request, res: Response
         });
         res.status(201).json({success: true, posts});
     } catch (error) {
-        return
+        return res.status(500).json({
+            success: false,
+            message: (error as Error).message,
+        });
     }
 })

@@ -22,6 +22,9 @@ export const getPostsFollowers = catchAsyncError(async (req: AuthenticatedReques
             .exec();
         res.status(201).json({success: true, posts});
     } catch (error) {
-        return
+        return res.status(500).json({
+            success: false,
+            message: (error as Error).message,
+        });
     }
 })
