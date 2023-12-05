@@ -23,14 +23,6 @@ export const updateLikes = catchAsyncError(async (req: any, res: any, next: any)
                 },
             });
 
-            if (req.user.id !== post!.user._id) {
-                await Notification.deleteOne({
-                    "creator._id": req.user.id,
-                    userId: post!.user._id,
-                    type: "Like",
-                });
-            }
-
             res.status(200).json({
                 success: true,
                 message: "Like removed successfully",
@@ -50,16 +42,6 @@ export const updateLikes = catchAsyncError(async (req: any, res: any, next: any)
                     },
                 }
             );
-
-            if (post && req.user.id !== post.user._id) {
-                await Notification.create({
-                    creator: req.user,
-                    type: "Like",
-                    title: post.title ? post.title : "Liked your post",
-                    userId: post.user._id,
-                    postId: postId,
-                });
-            }
 
             res.status(200).json({
                 success: true,

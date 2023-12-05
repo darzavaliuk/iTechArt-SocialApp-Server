@@ -9,7 +9,7 @@ interface AuthenticatedRequest extends Request {
 }
 
 interface Reply {
-    user:  IUser;
+    user: IUser;
     title: string;
     image?: {
         public_id: string;
@@ -40,7 +40,7 @@ export const updateReplyLikes = catchAsyncError(async (req: AuthenticatedRequest
         }
 
         const reply = post.replies.find(
-            (reply) => reply._id.toString() === replyId
+            (reply) => reply._id === replyId
         );
 
         if (!reply) {
@@ -63,18 +63,19 @@ export const updateReplyLikes = catchAsyncError(async (req: AuthenticatedRequest
                 success: true,
                 message: "Like removed from reply successfully",
             });
+        } else {
+
+            const newLike = {
+                name: req.user.name,
+                userName: req.user.userName,
+                userId: req.user._id,
+                userAvatar: req.user.avatar.url,
+            };
+
+            reply.likes.push(newLike);
+
+            await post.save();
         }
-
-        const newLike = {
-            name: req.user.name,
-            userName: req.user.userName,
-            userId: req.user._id,
-            userAvatar: req.user.avatar.url,
-        };
-
-        reply.likes.push(newLike);
-
-        await post.save();
 
         return res.status(200).json({
             success: true,

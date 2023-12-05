@@ -19,8 +19,8 @@ export const createUser = catchAsyncError(async (req: TypedRequestBody<IUser>, r
         const {name, email, password, avatar} = req.body;
 
         let user = await User.findOne({email});
+
         if (user) {
-            console.log(user)
             return res.status(400).json({
                 success: false,
                 message: "User already exists",

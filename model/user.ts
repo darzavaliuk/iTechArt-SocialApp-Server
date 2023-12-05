@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 const subTargetSchema = new mongoose.Schema({
     text: {
         type: String,
-        required: [true, "Please enter the sub-target name"],
+        required: [true, "Please enter the subtarget name"],
     },
     way: {
         type: String,
@@ -36,7 +36,10 @@ const targetSchema = new mongoose.Schema({
         type: String,
         required: [true, "Please enter the target name"],
     },
-    subTargets: [subTargetSchema],
+    userId: {
+        type: String,
+        required: [true, "Please provide the user ID"],
+    },
 });
 
 

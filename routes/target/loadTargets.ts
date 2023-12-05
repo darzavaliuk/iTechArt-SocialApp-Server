@@ -1,6 +1,6 @@
 import {catchAsyncError} from "../../middleware/catchAsyncError";
 import {NextFunction, Request, Response} from "express";
-import {User} from "../../model/user";
+import {Target, User} from "../../model/user";
 
 interface AuthenticatedRequest extends Request {
     user: {
@@ -18,7 +18,7 @@ export const loadTargets = catchAsyncError(async (req: AuthenticatedRequest, res
         });
     }
 
-    const targets = user.target;
+    const targets = await Target.find({ userId: req.user.id });;
 
     res.status(200).json({
         success: true,

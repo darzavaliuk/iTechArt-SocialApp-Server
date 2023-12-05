@@ -3,7 +3,11 @@ export interface IUser {
     name: string
     email: string,
     password: string,
-    avatar: string,
+    userName: string,
+    avatar: {
+        public_id: string,
+        url: string
+    },
     following: [
         {
             userId: {

@@ -1,6 +1,6 @@
 import {catchAsyncError} from "../../middleware/catchAsyncError";
 import {NextFunction, Request, Response} from "express";
-import {Target, User} from "../../model/user";
+import {SubTarget, Target, User} from "../../model/user";
 
 interface AuthenticatedRequest extends Request {
     user: {
@@ -20,10 +20,28 @@ export const addTarget = catchAsyncError(async (req: AuthenticatedRequest, res: 
 
     const targets = req.body.subtargets;
     const title = req.body.subtitle;
-    const target = await Target.findOne({ name: title });
 
-    target!.subTargets.push(targets);
-    await target!.save();
+    const subTargets = targets.map((subtarget) => ({
+        ...subtarget,
+        userId: req.user.id,
+    }));
+
+    const newTarget = new Target({
+        name: req.body.subtitle,
+        userId: req.user.id,
+        subTargets: subTargets,
+    });
+
+    // const target = await Target.findOne({ name: title });
+
+    // target!.subTargets.push(targets)
+
+    for (const subtarget of subTargets) {
+        const newSubTarget = new SubTarget(subtarget);
+        await newSubTarget.save();
+    }
+
+    await newTarget.save();
 
     res.status(200).json({
         success: true,
